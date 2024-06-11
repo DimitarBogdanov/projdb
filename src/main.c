@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include "data/dbdata.h"
+#include "data/types.h"
 
 int main() {
+	init_vtypes();
+
 	Database* db = create_db();
 	Table* rat_tbl = add_table(db, "rat");
-	ValueType* int_type = create_type(sizeof(int), "int");
-	add_column(rat_tbl, int_type, "id");
-	add_column(rat_tbl, int_type, "age");
+	add_column(rat_tbl, VT_INT, "id");
+	add_column(rat_tbl, VT_INT, "age");
 
 	free_entire_db(db);
 
