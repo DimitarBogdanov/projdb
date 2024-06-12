@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
 	TableDef* table_structure;
-	void* values;
+	char* values;
 } Row;
 
 typedef struct {
@@ -50,7 +50,7 @@ typedef struct {
 
 ValueType* create_type(int width, const char* name);
 ColumnDef* add_column(Table* to_table, ValueType* value_type, const char* col_name);
-Row* add_row(Table* to_table, void* values);
+Row* add_row(Table* to_table);
 Table* add_table(Database* to_db, const char* name);
 Database* create_db();
 
@@ -58,4 +58,7 @@ void free_row(Row* row);
 void free_table_with_rows(Table* tbl);
 void free_entire_db(Database* db);
 
+size_t get_colwidth_sum(Table* tbl);
+
 void* get_value(Row* row, int col_idx);
+void set_value(Row* row, int col_idx, void* value);

@@ -13,23 +13,36 @@ ValueType* create_type(int width, const char* name)
 ColumnDef* add_column(Table* to_table, ValueType* value_type, const char* col_name)
 {
 	// TODO: Resize data on existing rows
-	ColumnDef* ptr = malloc(sizeof(ColumnDef));
+
+	to_table->structure.num_cols++;
+	if (to_table->structure.num_cols == 1)
+	{
+		// Ensure we malloc on the first row just in case
+		to_table->structure.cols = calloc(1, sizeof(ColumnDef));
+	}
+	else
+	{
+		to_table->structure.cols = realloc(to_table->structure.cols, sizeof(ColumnDef) * to_table->structure.num_cols);
+	}
+
+	ColumnDef* ptr = &(to_table->structure.cols[to_table->structure.num_cols - 1]);
 	ptr->type = value_type;
 	ptr->name = strdup(col_name);
+
 	return ptr;
 }
 
-Row* add_row(Table* to_table, void* values)
+Row* add_row(Table* to_table)
 {
 	Row* row = malloc(sizeof(Row));
 	row->table_structure = &(to_table->structure);
-	row->values = values;
+	row->values = calloc(get_colwidth_sum(to_table), 1); // to ensure zeroing
 
 	to_table->num_rows++;
 	if (to_table->num_rows == 1)
 	{
 		// Ensure we malloc on the first row just in case
-		to_table->rows = malloc(sizeof(Row*));
+		to_table->rows = calloc(1, sizeof(Row*));
 	}
 	else
 	{
@@ -82,7 +95,32 @@ void* get_value(Row* row, int col_idx)
 		offset += row->table_structure->cols[i].type->width;
 	}
 
-	return &(row->values[offset]);
+	return *(row->values + offset);
+}
+
+void set_value(Row* row, int col_idx, void* value)
+{
+	if (col_idx >= row->table_structure->num_cols)
+	{
+		return;
+	}
+
+	size_t offset = 0;
+
+	for (int i = 0; i < col_idx; i++)
+	{
+		offset += row->table_structure->cols[i].type->width;
+	}
+
+	char* values_ptr = row->values;
+	char* offset_ptr = values_ptr + offset;
+
+	printf("For ColIdx=%d, Offset: %d\n", col_idx, offset);
+	printf("  Address of values: %p\n", values_ptr);
+	printf("  Address of change: %p\n", offset_ptr);
+
+	memcpy(offset_ptr, value, 1);
+	//memcpy((int*)row->values + offset, value, sizeof(int));
 }
 
 void free_table_with_rows(Table* tbl)
@@ -102,4 +140,16 @@ void free_entire_db(Database* db)
 	}
 
 	free(db);
+}
+
+size_t get_colwidth_sum(Table* tbl)
+{
+	size_t width = 0;
+
+	for (int i = 0; i < tbl->structure.num_cols; ++i)
+	{
+		width += tbl->structure.cols[i].type->width;
+	}
+
+	return width;
 }
