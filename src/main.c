@@ -1,10 +1,26 @@
 #include <stdio.h>
 #include "data/dbdata.h"
 #include "data/types.h"
+#include "repl.h"
+
+Database* generate_test_db();
 
 int main() {
 	init_vtypes();
 
+	Database* db = generate_test_db();
+
+	while (1) {
+		run_repl();
+	}
+
+	free_entire_db(db);
+
+	return 0;
+}
+
+Database* generate_test_db()
+{
 	Database* db = create_db();
 	Table* rat_tbl = add_table(db, "rat");
 	add_column(rat_tbl, VT_INT, "id");
@@ -16,10 +32,6 @@ int main() {
 	Row* row = add_row(rat_tbl);
 	set_value(row, 0, &valueId);
 	set_value(row, 1, &valueAge);
-	printf("ID: %d\n", (int)get_value(row, 0));
-	printf("Age: %d\n", (int)get_value(row, 1));
 
-	free_entire_db(db);
-
-	return 0;
+	return db;
 }
