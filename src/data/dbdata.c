@@ -115,12 +115,7 @@ void set_value(Row* row, int col_idx, void* value)
 	char* values_ptr = row->values;
 	char* offset_ptr = values_ptr + offset;
 
-	printf("For ColIdx=%d, Offset: %d\n", col_idx, offset);
-	printf("  Address of values: %p\n", values_ptr);
-	printf("  Address of change: %p\n", offset_ptr);
-
 	memcpy(offset_ptr, value, 1);
-	//memcpy((int*)row->values + offset, value, sizeof(int));
 }
 
 void free_table_with_rows(Table* tbl)
