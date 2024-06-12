@@ -4,6 +4,6 @@
 
 ValueType* VT_INT;
 ValueType* VT_BOOL;
-ValueType* VT_TEXT_30;
+ValueType* VT_TEXT_32;
 
 void init_vtypes();
