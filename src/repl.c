@@ -46,7 +46,7 @@ void print_full_width(char* str, int max_width)
         // 3. restore the modified string
         // 4. ???
         // 5. profit
-        int offsets[] = { max_width - 4, max_width - 3, max_width - 2, max_width - 1 };
+        int offsets[] = { max_width - 3, max_width - 2, max_width - 1, max_width };
         char temp[4];
         for (int i = 0; i < 4; ++i)
         {
