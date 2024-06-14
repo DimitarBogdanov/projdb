@@ -1,6 +1,7 @@
 #pragma once
 
 #include "parser.h"
+#include "../data/dbdata.h"
 
 /*
  * condfilters.h
@@ -8,3 +9,5 @@
  */
 
 ConditionFilter condfilter_all();
+
+RowSelectionLinkedList run_filter(Table* table, ConditionFilter filter);

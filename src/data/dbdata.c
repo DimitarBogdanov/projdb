@@ -148,3 +148,17 @@ size_t get_colwidth_sum(Table* tbl)
 
 	return width;
 }
+
+Table* get_table(Database* db, char* table_name)
+{
+	for (int i = 0; i < db->num_tables; ++i)
+	{
+		Table* t = db->tables[i];
+		if (!strcmp(t->structure.name, table_name))
+		{
+			return t;
+		}
+	}
+
+	return NULL;
+}

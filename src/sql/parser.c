@@ -56,14 +56,14 @@ char* expect_name(ParseHelper* parser)
 {
 	if (!has_tok(parser))
 	{
-		fprintf(stderr, "no token to expect name on");
+		fprintf(stderr, "no token to expect name on\n");
 		flag_parsing_as_failed(parser);
 		return NULL;
 	}
 	
 	if (!tok_is(parser, TOK_ID))
 	{
-		fprintf(stderr, "expected name");
+		fprintf(stderr, "expected name\n");
 		flag_parsing_as_failed(parser);
 		return NULL;
 	}
@@ -90,7 +90,7 @@ void parse_select(ParseHelper* parser)
 	else
 	{
 		// TODO: Support specific column select
-		fprintf(stderr, "expected *");
+		fprintf(stderr, "expected *\n");
 		flag_parsing_as_failed(parser);
 		return;
 	}
@@ -101,7 +101,7 @@ void parse_select(ParseHelper* parser)
 	}
 	else
 	{
-		fprintf(stderr, "expected FROM");
+		fprintf(stderr, "expected FROM\n");
 		flag_parsing_as_failed(parser);
 		return;
 	}

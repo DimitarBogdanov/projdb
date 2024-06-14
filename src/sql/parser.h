@@ -16,6 +16,7 @@ typedef struct _srow {
 typedef struct {
 	int num_rows;
 	SelectedRow* start;
+	SelectedRow* end;
 } RowSelectionLinkedList;
 
 typedef struct {

@@ -62,3 +62,5 @@ size_t get_colwidth_sum(Table* tbl);
 
 void* get_value(Row* row, int col_idx);
 void set_value(Row* row, int col_idx, void* value);
+
+Table* get_table(Database* db, char* table_name);
