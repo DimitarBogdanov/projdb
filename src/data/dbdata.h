@@ -14,6 +14,7 @@
 typedef struct {
 	size_t width;
 	const char* name;
+	char* (*get_str_value_fn)(void*); // ALWAYS ALLOCATES, takes in the value from get_value()
 } ValueType;
 
 typedef struct {
@@ -48,7 +49,7 @@ typedef struct {
 // Functions
 //
 
-ValueType* create_type(int width, const char* name);
+ValueType* create_type(int width, const char* name, char* (*get_str_value_fn)(void*));
 ColumnDef* add_column(Table* to_table, ValueType* value_type, const char* col_name);
 Row* add_row(Table* to_table);
 Table* add_table(Database* to_db, const char* name);

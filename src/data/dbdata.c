@@ -2,10 +2,11 @@
 #include <malloc.h>
 #include <string.h>
 
-ValueType* create_type(int width, const char* name)
+ValueType* create_type(int width, const char* name, char* (*get_str_value_fn)(void*))
 {
 	ValueType* ptr = malloc(sizeof(ValueType));
 	ptr->width = width;
+	ptr->get_str_value_fn = get_str_value_fn;
 	ptr->name = strdup(name);
 	return ptr;
 }

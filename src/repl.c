@@ -76,7 +76,7 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
     printf("| ");
     for (int i = 0; i < table_structure->num_cols; ++i)
     {
-        char* col_name = table_structure->cols[i].name;
+        char* col_name = (char*) table_structure->cols[i].name;
         print_full_width(col_name, width_per_col);
         printf(" | ");
     }
@@ -92,7 +92,10 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
 
         for (int i = 0; i < table_structure->num_cols; ++i)
         {
-            char* value = "TODO";
+            ColumnDef col = table_structure->cols[i];
+            void* value_ptr = get_value(ref, i);
+
+            char* value = col.type->get_str_value_fn(value_ptr);
             print_full_width(value, width_per_col);
             printf(" | ");
         }
