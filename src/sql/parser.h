@@ -22,10 +22,27 @@ typedef struct {
 	int (*filter_func)(Row*); // returns != 0 if the row should be selected
 } ConditionFilter;
 
+typedef enum {
+	PARSEOP_SELECT
+} ParseOperationIdx;
+
 typedef struct {
+	ParseOperationIdx op_type; // should always be PARSEOP_SELECT
 	ConditionFilter filter;
 	char* db_name;
 	char* table_name;
-} SelectionOperation;
+} ParseOperationSelect;
 
-void parse(TokenLinkedList* tokens, Database* db);
+typedef union {
+	ParseOperationIdx tag;
+
+	ParseOperationSelect select;
+} ParseOperation;
+
+typedef struct {
+	int has_errors;
+	int op_count;
+	ParseOperation* operations_arr;
+} ParseResult;
+
+ParseResult parse(TokenLinkedList* tokens, Database* db);
