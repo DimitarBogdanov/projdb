@@ -152,18 +152,5 @@ TokenLinkedList* tokenize(size_t len_src, char* src_str)
 		}
 	}
 
-	printf("tokenized\n");
-	Token* tok = list->start;
-	while (tok)
-	{
-		printf("   type: %d", tok->type);
-		if (tok->has_value)
-		{
-			printf(" ('%s')", tok->value);
-		}
-		printf("\n");
-		tok = tok->next;
-	}
-
 	return list;
 }
