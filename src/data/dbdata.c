@@ -96,7 +96,7 @@ void* get_value(Row* row, int col_idx)
 		offset += row->table_structure->cols[i].type->width;
 	}
 
-	return *(row->values + offset);
+	return (row->values + offset);
 }
 
 void set_value(Row* row, int col_idx, void* value)
@@ -116,7 +116,9 @@ void set_value(Row* row, int col_idx, void* value)
 	char* values_ptr = row->values;
 	char* offset_ptr = values_ptr + offset;
 
-	memcpy(offset_ptr, value, 1);
+	int width = row->table_structure->cols[col_idx].type->width;
+
+	memcpy(offset_ptr, value, width);
 }
 
 void free_table_with_rows(Table* tbl)
