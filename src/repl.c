@@ -84,12 +84,12 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
     print_sep_line(width_per_col, table_structure->num_cols);
 
     // Data
-    printf("| ");
     SelectedRow* row = rows.start;
     while (row)
     {
         Row* ref = row->ref;
 
+        printf("| ");
         for (int i = 0; i < table_structure->num_cols; ++i)
         {
             ColumnDef col = table_structure->cols[i];
@@ -101,6 +101,11 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
         }
 
         row = row->next;
+
+        if (row)
+        {
+            puts("");
+        }
     }
     puts("");
     print_sep_line(width_per_col, table_structure->num_cols);
@@ -122,7 +127,7 @@ void run_op(Database* db, ParseOperation* op)
         RowSelectionLinkedList result = run_filter(t, selectOp.filter);
 
         print_rows(&t->structure, result);
-        printf("\nselected %d rows\n", result.num_rows);
+        printf("\nselected %d row(s)\n", result.num_rows);
 
         // Free results
         SelectedRow* curr = result.start;
