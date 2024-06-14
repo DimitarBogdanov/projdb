@@ -6,9 +6,11 @@
 
 char* _strval_int(void* value)
 {
-	int length = snprintf( NULL, 0, "%d", value);
+	int32_t* ptr = (int32_t*)value;
+
+	int length = snprintf( NULL, 0, "%d", *ptr);
 	char* str = malloc( length + 1 );
-	snprintf( str, length + 1, "%d", value );
+	snprintf( str, length + 1, "%d", *ptr );
 
 	return str;
 }
