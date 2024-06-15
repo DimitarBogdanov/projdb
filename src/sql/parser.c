@@ -93,10 +93,11 @@ void parse_select(ParseHelper* parser)
 	{
 		char* full_str = strdup(parser->curr->value);
 		next_token(parser);
-		while (peek_tok_is(parser, TOK_COMMA))
+		while (tok_is(parser, TOK_COMMA))
 		{
 			next_token(parser); // skip the comma
 			char* this_name = expect_name(parser);
+			next_token(parser); // skip the name
 
 			strcat(full_str, ",");
 			strcat(full_str, this_name);
@@ -106,7 +107,6 @@ void parse_select(ParseHelper* parser)
 	}
 	else
 	{
-		// TODO: Support specific column select
 		fprintf(stderr, "expected * or column name(s)\n");
 		flag_parsing_as_failed(parser);
 		return;
