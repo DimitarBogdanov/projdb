@@ -10,8 +10,9 @@ int main() {
 
 	Database* db = generate_test_db();
 
-	while (1) {
-		run_repl(db);
+	int res = 1;
+	while (res) {
+		res = run_repl(db);
 	}
 
 	free_entire_db(db);

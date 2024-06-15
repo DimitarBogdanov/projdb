@@ -7,4 +7,5 @@
  * Contains methods for running the console REPL loop.
  */
 
-void run_repl(Database* db);
+// 0 = cancel REPL
+int run_repl(Database* db);

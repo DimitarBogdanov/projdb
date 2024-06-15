@@ -194,7 +194,8 @@ void execute_result(Database* db, ParseResult res)
     run_op(db, res.operations_arr);
 }
 
-void run_repl(Database* db)
+// 0 = cancel REPL
+int run_repl(Database* db)
 {
     char* line = NULL;
     size_t len = 0;
@@ -202,7 +203,14 @@ void run_repl(Database* db)
     printf("> ");
     read_length = getline(&line, &len, stdin);
     if (read_length == -1)
-        return;
+    {
+        return 0;
+    }
+
+    if (strcmp(line, "exit\n") == 0)
+    {
+        return 0;
+    }
 
     TokenLinkedList* tok_result = tokenize(read_length, line);
     ParseResult parse_result = parse(tok_result, db);
@@ -212,4 +220,6 @@ void run_repl(Database* db)
 
     free(tok_result); // todo: why is this a pointer? the structure is tiny
     free(line);
+
+    return 1;
 }
