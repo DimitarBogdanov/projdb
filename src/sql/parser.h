@@ -21,6 +21,7 @@ typedef struct {
 
 typedef struct {
 	int (*filter_func)(Row*); // returns != 0 if the row should be selected
+	char* col_name_split; // NULL for all columns
 } ConditionFilter;
 
 typedef enum {

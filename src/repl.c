@@ -66,22 +66,54 @@ void print_full_width(char* str, int max_width)
     }
 }
 
-void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
+int count_cols_to_show(TableDef* table_structure, char* filter_str)
+{
+    if (!filter_str)
+    {
+        return table_structure->num_cols;
+    }
+
+    if (strcmp(filter_str, "") == 0)
+    {
+        return 0;
+    }
+
+    int count = 1;
+    int len = strlen(filter_str);
+    for (int i = 0; i < len; ++i)
+    {
+        if (filter_str[i] == ',')
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+void print_rows(TableDef* table_structure, ConditionFilter filter, RowSelectionLinkedList rows)
 {
     const int max_width = 100; // completely arbitrary
-    int width_per_col = max_width / table_structure->num_cols;
+
+    int num_cols = count_cols_to_show(table_structure, filter.col_name_split);
+
+    int width_per_col = max_width / num_cols;
 
     // Header
-    print_sep_line(width_per_col, table_structure->num_cols);
+    print_sep_line(width_per_col, num_cols);
     printf("| ");
     for (int i = 0; i < table_structure->num_cols; ++i)
     {
         char* col_name = (char*) table_structure->cols[i].name;
+        if (!should_show_col(filter.col_name_split, col_name))
+        {
+            continue;
+        }
+
         print_full_width(col_name, width_per_col);
         printf(" | ");
     }
     puts("");
-    print_sep_line(width_per_col, table_structure->num_cols);
+    print_sep_line(width_per_col, num_cols);
 
     // Data
     SelectedRow* row = rows.start;
@@ -93,6 +125,12 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
         for (int i = 0; i < table_structure->num_cols; ++i)
         {
             ColumnDef col = table_structure->cols[i];
+
+            if (!should_show_col(filter.col_name_split, col.name))
+            {
+                continue;
+            }
+            
             void* value_ptr = get_value(ref, i);
 
             char* value = col.type->get_str_value_fn(value_ptr);
@@ -108,7 +146,7 @@ void print_rows(TableDef* table_structure, RowSelectionLinkedList rows)
         }
     }
     puts("");
-    print_sep_line(width_per_col, table_structure->num_cols);
+    print_sep_line(width_per_col, num_cols);
 }
 
 void run_op(Database* db, ParseOperation* op)
@@ -126,7 +164,7 @@ void run_op(Database* db, ParseOperation* op)
 
         RowSelectionLinkedList result = run_filter(t, selectOp.filter);
 
-        print_rows(&t->structure, result);
+        print_rows(&t->structure, selectOp.filter, result);
         printf("\nselected %d row(s)\n", result.num_rows);
 
         // Free results

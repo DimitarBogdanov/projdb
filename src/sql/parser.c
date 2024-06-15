@@ -32,14 +32,14 @@ void next_token(ParseHelper* parser)
 	parser->curr = parser->curr->next;
 }
 
-Token* peek_tok(ParseHelper* parser)
+int peek_tok_is(ParseHelper* parser, TokenType expected_type)
 {
-	if (!parser->curr)
+	if (!parser->curr || !parser->curr->next)
 	{
-		return NULL;
+		return 0;
 	}
 
-	return parser->curr->next;
+	return parser->curr->next->type == expected_type;
 }
 
 int has_tok(ParseHelper* parser)
@@ -81,16 +81,33 @@ void parse_select(ParseHelper* parser)
 {
 	next_token(parser);
 
+	char* col_names_sep_comma = NULL;
+
 	ConditionFilter filter;
 	if (tok_is(parser, TOK_ASTERISK))
 	{
 		next_token(parser);
 		filter = condfilter_all();
 	}
+	else if (tok_is(parser, TOK_ID))
+	{
+		char* full_str = strdup(parser->curr->value);
+		next_token(parser);
+		while (peek_tok_is(parser, TOK_COMMA))
+		{
+			next_token(parser); // skip the comma
+			char* this_name = expect_name(parser);
+
+			strcat(full_str, ",");
+			strcat(full_str, this_name);
+			free(this_name);
+		}
+		filter = condfilter_cols(full_str);
+	}
 	else
 	{
 		// TODO: Support specific column select
-		fprintf(stderr, "expected *\n");
+		fprintf(stderr, "expected * or column name(s)\n");
 		flag_parsing_as_failed(parser);
 		return;
 	}
@@ -113,7 +130,7 @@ void parse_select(ParseHelper* parser)
 	op->op_type == PARSEOP_SELECT;
 	op->db_name = NULL;
 	op->table_name = table_name;
-	op->filter = condfilter_all();
+	op->filter = filter;
 	add_parse_op(parser, (ParseOperation*) op);
 }
 

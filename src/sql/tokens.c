@@ -150,6 +150,12 @@ TokenLinkedList* tokenize(size_t len_src, char* src_str)
 			tok_len = 0;
 			push_tok_direct(list, TOK_ASTERISK);
 		}
+		else if (curr == ',')
+		{
+			push_tok(list, buff, &tok_len);
+			tok_len = 0;
+			push_tok_direct(list, TOK_COMMA);
+		}
 	}
 
 	return list;

@@ -14,7 +14,8 @@ typedef enum {
 	TOK_WHERE,
 	TOK_ID,
 
-	TOK_ASTERISK
+	TOK_ASTERISK,
+	TOK_COMMA
 } TokenType;
 
 typedef struct _tok {
