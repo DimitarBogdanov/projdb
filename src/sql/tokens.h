@@ -32,4 +32,4 @@ typedef struct {
 	Token* end;
 } TokenLinkedList;
 
-TokenLinkedList* tokenize(size_t len_src, char* src_str);
+TokenLinkedList tokenize(size_t len_src, char* src_str);

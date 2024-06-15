@@ -120,9 +120,9 @@ void push_tok(TokenLinkedList* list, char* buff, int* tok_len)
 	*tok_len = 0;
 }
 
-TokenLinkedList* tokenize(size_t len_src, char* src_str)
+TokenLinkedList tokenize(size_t len_src, char* src_str)
 {
-	TokenLinkedList* list = malloc(sizeof(TokenLinkedList));
+	TokenLinkedList list;
 
 	char buff[BUFF_SIZE_TOK];
 	int tok_len = 0;
@@ -138,7 +138,7 @@ TokenLinkedList* tokenize(size_t len_src, char* src_str)
 
 		if (isspace(curr))
 		{
-			push_tok(list, buff, &tok_len);
+			push_tok(&list, buff, &tok_len);
 		}
 		else if (isdigit(curr) || isalpha(curr))
 		{
@@ -146,15 +146,15 @@ TokenLinkedList* tokenize(size_t len_src, char* src_str)
 		}
 		else if (curr == '*')
 		{
-			push_tok(list, buff, &tok_len);
+			push_tok(&list, buff, &tok_len);
 			tok_len = 0;
-			push_tok_direct(list, TOK_ASTERISK);
+			push_tok_direct(&list, TOK_ASTERISK);
 		}
 		else if (curr == ',')
 		{
-			push_tok(list, buff, &tok_len);
+			push_tok(&list, buff, &tok_len);
 			tok_len = 0;
-			push_tok_direct(list, TOK_COMMA);
+			push_tok_direct(&list, TOK_COMMA);
 		}
 	}
 

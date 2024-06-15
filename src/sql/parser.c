@@ -134,12 +134,12 @@ void parse_select(ParseHelper* parser)
 	add_parse_op(parser, (ParseOperation*) op);
 }
 
-ParseResult parse(TokenLinkedList* tokens, Database* db)
+ParseResult parse(TokenLinkedList tokens, Database* db)
 {
 	ParseHelper helper;
 	helper.did_parsing_fail = 0;
 	helper.op = NULL;
-	helper.curr = tokens->start;
+	helper.curr = tokens.start;
 
 	while (helper.curr)
 	{

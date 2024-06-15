@@ -212,13 +212,12 @@ int run_repl(Database* db)
         return 0;
     }
 
-    TokenLinkedList* tok_result = tokenize(read_length, line);
+    TokenLinkedList tok_result = tokenize(read_length, line);
     ParseResult parse_result = parse(tok_result, db);
 
     execute_result(db, parse_result);
     puts("");
 
-    free(tok_result); // todo: why is this a pointer? the structure is tiny
     free(line);
 
     return 1;

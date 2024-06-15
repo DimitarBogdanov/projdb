@@ -47,4 +47,4 @@ typedef struct {
 	ParseOperation* operations_arr;
 } ParseResult;
 
-ParseResult parse(TokenLinkedList* tokens, Database* db);
+ParseResult parse(TokenLinkedList tokens, Database* db);
